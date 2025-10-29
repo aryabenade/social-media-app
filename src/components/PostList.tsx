@@ -8,6 +8,7 @@ export interface Post {
     content: string;
     created_at: string;
     image_url: string;
+    avatar_url?:string;
 }
 
 const fetchPosts = async (): Promise<Post[]> => {
@@ -27,7 +28,9 @@ export const PostList = () => {
         queryFn: fetchPosts
     });
 
-    if (isLoading) <div> Loading posts...</div>;
+    if (isLoading) {
+        return <div> Loading posts...</div>;
+    }
 
     if (error) {
         return <div>Error:{error.message}</div>
