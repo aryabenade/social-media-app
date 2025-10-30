@@ -40,7 +40,7 @@ export const PostDetail = ({ postId }: Props) => {
 
     return (
         <div className="space-y-6">
-      <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+      <h2 className="text-6xl font-bold mb-6 text-center bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
         {data?.title}
       </h2>
       {data?.image_url && (
