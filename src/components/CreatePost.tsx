@@ -11,9 +11,17 @@ interface PostInput {
     community_id?: number | null;
 }
 
+const sanitizeFileName = (name: string) => {
+  return name
+    .replace(/[^a-zA-Z0-9-_]/g, "_") // Replace unsafe characters with underscores
+    .toLowerCase();
+}
+
 const createPost = async (post: PostInput, imageFile: File) => {
 
-    const filePath = `${post.title}-${Date.now()}-${imageFile.name}`
+   const rawFileName = `${post.title}-${Date.now()}-${imageFile.name}`;
+  const filePath = sanitizeFileName(rawFileName);
+
 
     const { error: uploadError } = await supabase.storage.from("post-images").upload(filePath, imageFile)
 
