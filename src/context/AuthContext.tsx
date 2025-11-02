@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         supabase.auth.signInWithOAuth({ provider: "github" });
     }
 
-    const signOut = () => {
-        supabase.auth.signOut()
+    const signOut = async () => {
+        await supabase.auth.signOut()
     }
 
     return <AuthContext.Provider value={{ user, signInWithGitHub, signOut }}>

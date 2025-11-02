@@ -150,9 +150,9 @@ export const Navbar = () => {
                                 )}
                                 <span className="text-gray-300 text-sm">{displayName}</span>
                                 <button
-                                    onClick={() => {
+                                    onClick={async () => {
+                                        await signOut();
                                         setMenuOpen(false);
-                                        signOut();
                                     }}
                                     className="bg-red-500 text-white px-3 py-1 rounded text-sm"
                                 >

@@ -39,7 +39,7 @@ export const CreateCommunity = () => {
 
     return (
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
-            <h2 className="text-6xl font-bold mb-6 text-center bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+            <h2 className="mb-6 py-3 text-6xl font-bold text-center text-transparent bg-linear-to-r from-purple-500 to-pink-500 bg-clip-text">
                 Create New Community
             </h2>
             <div>
@@ -51,7 +51,7 @@ export const CreateCommunity = () => {
                     id="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full border border-white/10 bg-transparent p-2 rounded"
+                    className="w-full p-2 bg-transparent border rounded border-white/10"
                     required
                 />
             </div>
@@ -63,13 +63,13 @@ export const CreateCommunity = () => {
                     id="description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full border border-white/10 bg-transparent p-2 rounded"
+                    className="w-full p-2 bg-transparent border rounded border-white/10"
                     rows={3}
                 />
             </div>
             <button
                 type="submit"
-                className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer"
+                className="px-4 py-2 text-white bg-purple-500 rounded cursor-pointer"
             >
                 {isPending ? "Creating..." : "Create Community"}
             </button>
