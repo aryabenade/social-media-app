@@ -1,73 +1,122 @@
-# React + TypeScript + Vite
+# Community Forum & Q&A Site 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Developed a modern social media platform with GitHub OAuth, real-time post updates, voting,and threaded comments. Leveraged Supabase for backend logic and realtime sync, and used React Query tomanage data fetching, caching, and global loading/error states across components. Designed for dynamicinteraction, responsive layout, and smooth user experience across devices. Deployed on Vercel.
 
-Currently, two official plugins are available:
+## ⚙️ Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React** for building the user interface
+- **Vite** for fast development and build processes
+- **TypeScript** for type safety and modern JavaScript features
+- **Supabase** for backend services including authentication, real-time data, and storage
+- **Tailwind CSS** for rapid and responsive styling
 
-## React Compiler
+## ⚡️ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **User Authentication via GitHub:**  
+  Securely sign in with GitHub and display user avatars and usernames across the site.
 
-## Expanding the ESLint configuration
+- **Post Creation with Image Uploads:**  
+  Create posts with rich content and optional image uploads, complete with the creator’s profile picture.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Dynamic Voting System:**  
+  Thumbs up and thumbs down buttons with subtle white glow effects to indicate your vote.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Robust Commenting System:**  
+  Engage in threaded discussions with nested replies, each showing the commenter’s username and timestamp.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Community & Category Support:**  
+  Build a Reddit-like experience where posts are organized by communities, with posts displayed in a responsive grid.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Modern Glassmorphism & Glow Effects:**  
+  Enjoy a visually striking interface featuring glassy, transparent cards with glowing gradient borders on hover.
+
+- **Real-Time Data Updates:**  
+  All interactions (posting, voting, commenting) update in real time using Supabase and React Query.
+
+## 👌 Quick Start
+
+### Prerequisites
+
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/en/)
+- [npm](https://www.npmjs.com/)
+
+### Cloning the Repository
+
+Run the following commands in your terminal:
+
+```bash
+git clone https://github.com/machadop1407/social-media-vite-supabase.git
+cd social-media-tutorial
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Installation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Install the dependencies:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+```
+
+### Environment Variables
+
+Create a file named `.env` in the project root and add your Supabase credentials and other configuration values:
+
+```env
+VITE_SUPABASE_URL=https://your-supabase-url.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+### Running the Project
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 🕸️ Code Snippets
+
+Below are some key code snippets from the project.
+
+### RPC Function with Avatar URL
+
+```sql
+CREATE OR REPLACE FUNCTION get_posts_with_counts()
+RETURNS TABLE (
+  id integer,
+  title text,
+  content text,
+  created_at timestamptz,
+  image_url text,
+  like_count integer,
+  comment_count integer,
+  user_avatar_url text
+)
+LANGUAGE sql
+AS $$
+  SELECT 
+    p.id,
+    p.title,
+    p.content,
+    p.created_at,
+    p.image_url,
+    (SELECT COUNT(*) FROM votes v WHERE v.post_id = p.id) AS like_count,
+    (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) AS comment_count,
+    p.user_avatar_url
+  FROM posts p
+  ORDER BY p.created_at DESC;
+$$;
+```
+
+### Vote Deletion RLS Policy
+
+```sql
+ALTER TABLE votes ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Delete own vote" ON votes
+FOR DELETE
+USING (auth.uid()::text = user_id);
 ```
